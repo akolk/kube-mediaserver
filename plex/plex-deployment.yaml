@@ -24,7 +24,7 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - image: jaymoulin/plex
+      - image: jaymoulin/plex:1.15.0-aarch64
         name: plex
         ports:
         - containerPort: 32400
@@ -43,27 +43,39 @@ spec:
           protocol: UDP
         resources: {}
         volumeMounts:
-        - mountPath: /media
-          name: media
+        - mountPath: /media/series
+          name: mediaseries
+        - mountPath: /media/films
+          name: mediafilms
+        - mountPath: /media/documentaries
+          name: mediadocs
         - mountPath: /root/Library
-          name: plex-config
+          name: library
       restartPolicy: Always
       volumes:
-      - name: media
+      - name: mediaseries
         nfs:
-          server: 192.168.1.56
-          path: "/mnt/mediahdd/"
-      - name: plex-config
-        persistentVolumeClaim:
-          claimName: plex-config
+          server: 192.168.178.33
+          path: "/volume1/Series/"
+      - name: mediafilms
+        nfs:
+          server: 192.168.178.33
+          path: "/volume2/film2/"
+      - name: library
+        nfs:
+          server: 192.168.178.33
+          path: "/volume1/plexconfig/"
+      - name: mediadocs
+        nfs:
+          server: 192.168.178.33
+          path: "/volume1/documentaries/"
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                - key: node-role.kubernetes.io/master
+                - key: kubernetes.io/hostname
                   operator: NotIn
                   values:
-                  - ''
-
+                  - 'ubuntu'
 status: {}
