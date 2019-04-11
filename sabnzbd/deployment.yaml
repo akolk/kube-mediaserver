@@ -30,14 +30,17 @@
                name: sabnzbd-incomplete
       volumes:
         - name: sabnzbd-config
-          hostPath:
-            path: /nfs/media/sabnzbd/config <<< change to local NFS mount on your k8s nodes
+          nfs:
+            server: 192.168.178.33
+            path: /volume1/openflixr/downloads/sabnzbd-config
         - name: sabnzbd-downloads
-          hostPath:
-            path: /nfs/media/sabnzbd/completed-downloads<<< change to local NFS mount on your k8s nodes
+          nfs:
+            server: 192.168.178.33
+            path: /volume1/openflixr/downloads
         - name: sabnzbd-incomplete
-          hostPath:
-            path: /nfs/media/sabnzbd/incomplete-downloads<<< change to local NFS mount on your k8s nodes
+          nfs:
+            server: 192.168.178.33
+            path: /volume1/openflixr/downloads/incomplete
 ---
 kind: Service
 apiVersion: v1
